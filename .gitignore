@@ -5,3 +5,12 @@
 mfpca_components.sublime-project
 mfpca_components.sublime-workspace
 .Rproj.user
+
+*.aux
+*.fdb_latexmk
+*.fls
+*.log
+*.out
+*.synctex.gz
+*.bbl
+*.blg
