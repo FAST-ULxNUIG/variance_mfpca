@@ -14,3 +14,5 @@ mfpca_components.sublime-workspace
 *.synctex.gz
 *.bbl
 *.blg
+
+*.rds

@@ -95,7 +95,9 @@ results_list <- foreach(
     # Univariate FPCA
     npc_univ <- rep(0, P)
     for (idx in 1:P) {
-        pace <- MFPCA::PACE(funDataObject = sim$simData[[idx]], pve = pct_univ[idx])
+        pace <- MFPCA::PACE(
+            funDataObject = sim$simData[[idx]], pve = pct_univ[idx]
+        )
         npc_univ[idx] <- pace$npc
     }
     npc <- sum(npc_univ)
@@ -119,7 +121,7 @@ parallel::stopCluster(cl = cl)
 # -----------------------------------------------------------------------------
 # Save the results
 file_name <- paste0(
-    'results_pve__N_', N, '_P_', P, '_M_', M, '_K_', K,
+    'results_pve_N_', N, '_P_', P, '_M_', M, '_K_', K,
     '_univ_', opt$npc_univ, '_', N_sim, '.rds'
 )
 saveRDS(results_list, file = file_name)
