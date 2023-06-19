@@ -10,72 +10,110 @@
 library(funData)
 library(MFPCA)
 library(tidyverse)
+library(tikzDevice)
 
 # -----------------------------------------------------------------------------
-# Exponential
-# -----------------------------------------------------------------------------
-true_vals <- eVal(K, 'exponential')
-true_vals_df <- tibble(
-    variable = 1:length(true_vals),
-    value = true_vals
-)
+# Paths
+PATH <- './results/ncomp'
+GRAPHS <- './graphs'
 
 
 # -----------------------------------------------------------------------------
-# Extract results for eigenvalues
-# -----------------------------------------------------------------------------
-eigenvalues <- results_list |>
-    lapply(function(x) x$values)
+# Variables
+K <- 50
+true_eigenvalues <- eVal(K, 'exponential')
 
-eigenvalues_compare <- simu_list |>
-    lapply(function(x) abs(true_vals[1:npc] - x$values) / true_vals[1:npc])
-
-eigenvalues_tbl <- tibble(
-    n_simu = rep(1:N_sim, each = npc),
-    N = rep(1:npc, times = N_sim),
-    value = unlist(eigenvalues),
-    values_compare = unlist(eigenvalues_compare)
-)
 
 # -----------------------------------------------------------------------------
-# Extract results for eigenfunctions
-# -----------------------------------------------------------------------------
-compare_mfd <- function(true_curve, estim_curve) {
-    results <- rep(0, nObs(estim_curve))
-    for (idx in 1:nObs(estim_curve)) {
-        results[idx] = min(
-            norm(true_curve[idx] - estim_curve[idx])**2,
-            norm(true_curve[idx] + estim_curve[idx])**2
-        )
-    }
-    return(results)
+# Functions
+extract_eigenvalues <- function(filename) {
+    result_list <- readRDS(paste0(PATH, '/', filename))
+    
+    # Get the different parameters
+    N <- as.integer(
+        str_extract(str_extract(filename, "N_[:digit:]+"), "[:digit:]+")
+    )
+    P <- as.integer(
+        str_extract(str_extract(filename, "P_[:digit:]+"), "[:digit:]+")
+    )
+    M <- as.integer(
+        str_extract(str_extract(filename, "M_[:digit:]+"), "[:digit:]+")
+    )
+    K <- as.integer(
+        str_extract(str_extract(filename, "K_[:digit:]+"), "[:digit:]+")
+    )
+    NPC <- as.integer(
+        str_extract(str_extract(filename, "univ_[:digit:]+"), "[:digit:]+")
+    )
+    N_SIMU <- as.integer(
+        str_extract(str_extract(filename, "[:digit:]+.rds"), "[:digit:]+")
+    )
+    
+    eigenvalues <- result_list |>
+        lapply(function(x) x$values)
+    
+    rm(result_list)
+    gc()
+    
+    list(
+        'N' = N, 'P' = P, 'M' = M, 'K' = K, 'NPC' = NPC, 'N_SIMU' = N_SIMU,
+        eigenvalues = eigenvalues
+    )
 }
 
-eigenfunctions <- simu_list |>
-    lapply(function(x) x$functions)
+error_eigenvalues <- function(eigenvalues, eigenvalues_estim) {
+    (eigenvalues - eigenvalues_estim)**2 / eigenvalues**2
+}
 
-eigenfunctions_compare <- simu_list |>
-    lapply(function(x) compare_mfd(sim$trueFuns[1:npc], x$functions))
+plot_eigenvalues <- function(idx) {
+    # Extract eigenvalues
+    eigenvalues <- extract_eigenvalues(results_fls[idx])
+    
+    NPC <- min(eigenvalues$K, eigenvalues$P * eigenvalues$NPC)
+    
+    eigenvalues$errors <- eigenvalues$eigenvalues |> lapply(
+        function(x) {
+            vals <- true_eigenvalues[1:NPC]
+            error_eigenvalues(vals, x)
+        }
+    )
 
-eigenfunctions_tbl <- tibble(
-    n_simu = rep(1:N_sim, each = npc),
-    N = rep(1:npc, times = N_sim),
-    values_compare = unlist(eigenfunctions_compare)
-)
+    errors_tbl <- tibble(
+        number = rep(1:NPC, eigenvalues$N_SIMU),
+        value = unlist(eigenvalues$errors)
+    )
+
+    title = paste0(
+        '$N = ', eigenvalues$N, ' - M = ', eigenvalues$M,
+        ' - K_p = ', eigenvalues$NPC, '$'
+    )
+    gg <- ggplot(errors_tbl) +
+        geom_boxplot(aes(x = number, y = value, group = number)) +
+        labs(
+            title = title,
+            x = "Eigenvalues",
+            y = "Errors"
+        ) +
+        see::theme_modern()
+    
+    name <- paste0(
+        '/ncomp_eigenvalues_N_', eigenvalues$N, '_M_', eigenvalues$M,
+        '_univ_', eigenvalues$NPC, '.tex'
+    )
+    tikzDevice::tikz(
+        filename = paste0(GRAPHS, name), 
+        width = 10, height = 6.18047, 
+        standAlone = TRUE, sanitize = FALSE
+    )
+    plot(gg)
+    dev.off()
+}
 
 
 # -----------------------------------------------------------------------------
-# Plots
-# -----------------------------------------------------------------------------
+results_fls <- list.files(PATH, full.names = FALSE, pattern = '.rds')
 
-ggplot(eigenvalues_tbl) +
-    geom_boxplot(aes(x = N, y = values_compare, group = N)) +
-    xlab('Eigenvalues') +
-    ylab('Error') +
-    see::theme_modern()
+for (idx in 1:length(results_fls)) {
+    plot_eigenvalues(idx)
+}
 
-ggplot(eigenfunctions_tbl) +
-    geom_boxplot(aes(x = N, y = values_compare, group = N)) +
-    xlab('Eigenvalues') +
-    ylab('Error') +
-    see::theme_modern()
