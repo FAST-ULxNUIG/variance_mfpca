@@ -26,6 +26,10 @@ true_percentage <- cumsum(true_eigenvalues) / sum(true_eigenvalues)
 
 # -----------------------------------------------------------------------------
 # Functions
+compute_npc <- function(NPC, true_percentage) {
+    sum(true_percentage < NPC) + 1
+}
+
 extract_npc <- function(filename) {
     result_list <- readRDS(paste0(PATH, '/', filename))
     
@@ -52,18 +56,46 @@ results_fls <- list.files(PATH, full.names = FALSE, pattern = '.rds')
 results <- results_fls |> 
     lapply(function(x) extract_npc(x)) |> 
     bind_rows()
+results$N_lab <- factor(
+    results$N,
+    labels = c("$N = 25$", "$N = 50$", "$N = 100$")
+)
+results$M_lab <- factor(
+    results$M,
+    labels = c("$M = 25$", "$M = 50$", "$M = 100$")
+)
 
+results_unique <- results |> 
+    select(N, M, NPC) |> 
+    unique() |> 
+    mutate(
+        NPC_int = sapply(
+            results_unique$NPC, compute_npc, true_percentage = true_percentage
+        )
+    )
 
-results_unique <- results |> select(N, M, NPC) |> unique()
-
-ggplot(results) +
-    geom_count(aes(y = npc_estim, x = as.factor(NPC))) +
-    #geom_line(aes(y = NPC, x = NPC), color = 'red') +
-    facet_grid(rows = vars(N), cols = vars(M)) + 
+gg <- ggplot(results) +
+    geom_count(aes(x = as.factor(NPC), y = npc_estim)) +
+    geom_point(
+        aes(x = as.factor(NPC), y = NPC_int), data = results_unique, 
+        color = 'red'
+    ) +
+    scale_y_continuous(breaks = seq(1, 10, by = 1)) +
+    facet_grid(N_lab ~ M_lab) + 
     labs(
         x = "Percentage of variance explained",
         y = "NPC"
     ) +
-    see::theme_modern()
+    guides(size = guide_legend(title = 'Number of simulations')) +
+    see::theme_modern() +
+    theme(
+        legend.position = "bottom", strip.text = element_text(size = 14)
+    )
 
-
+tikzDevice::tikz(
+    filename = paste0(GRAPHS, '/npc_estim.tex'), 
+    width = 10, height = 10, 
+    standAlone = TRUE, sanitize = FALSE
+)
+plot(gg)
+dev.off()

@@ -52,18 +52,43 @@ results_fls <- list.files(PATH, full.names = FALSE, pattern = '.rds')
 results <- results_fls |> 
     lapply(function(x) extract_npc(x)) |> 
     bind_rows()
+results$N_lab <- factor(
+    results$N,
+    labels = c("$N = 25$", "$N = 50$", "$N = 100$")
+)
+results$M_lab <- factor(
+    results$M,
+    labels = c("$M = 25$", "$M = 50$", "$M = 100$")
+)
 
+results_unique <- results |> 
+    select(N, M, NPC) |> 
+    unique() |> 
+    mutate(
+        NPC_int = as.numeric(as.factor(NPC))
+    )
 
-results_unique <- results |> select(N, M, NPC) |> unique()
-
-ggplot(results) +
+gg <- ggplot(results) +
     geom_boxplot(aes(y = pct_explained, x = as.factor(NPC))) +
-    #geom_line(aes(y = NPC, x = NPC), color = 'red') +
-    facet_grid(rows = vars(N), cols = vars(M)) + 
+    geom_segment(
+        aes(x = NPC_int - 0.5, xend = NPC_int + 0.5,
+            y = NPC, yend = NPC), data = results_unique,
+        color = 'red'
+    ) +
+    facet_grid(N_lab ~ M_lab) + 
     labs(
         x = "True percentage explained",
         y = "Percentage explained estimed"
     ) +
-    see::theme_modern()
+    see::theme_modern() +
+    theme(
+        legend.position = "bottom", strip.text = element_text(size = 14)
+    )
 
-
+tikzDevice::tikz(
+    filename = paste0(GRAPHS, '/pct_estim.tex'), 
+    width = 10, height = 10, 
+    standAlone = TRUE, sanitize = FALSE
+)
+plot(gg)
+dev.off()
