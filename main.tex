@@ -98,26 +98,40 @@
 }}
 % -------------
 
-\title{A note on the number of components retained for multivariate functional principal components analysis}
-\author{Steven Golovkine}
+\title{Estimation of the number of components in multivariate functional data analysis: A comment on Happ and Greven}
+\author{%
+Steven Golovkine\thanks{MACSI, Department of Mathematics and Statistics, University of Limerick, Ireland \href{mailto:steven.golovkine@ul.ie}{steven.golovkine@ul.ie}}
+\and
+Edward Gunning\thanks{MACSI, Department of Mathematics and Statistics, University of Limerick, Ireland \href{mailto:edward.gunning@ul.ie}{edward.gunning@ul.ie}}
+\and
+Andrew J. Simpkin\thanks{School of Mathematical and Statistical Sciences, University of Galway, Ireland \href{mailto:andrew.simpkin@nuigalway.ie}{andrew.simpkin@nuigalway.ie}}
+\and
+Norma Bargary\thanks{MACSI, Department of Mathematics and Statistics, University of Limerick, Ireland \href{mailto:norma.bargary@ul.ie}{norma.bargary@ul.ie}}
+}
 \date{\today}
 
 \begin{document}
 \maketitle
 
 \begin{abstract}
-Your abstract.
+A methodology for multivariate functional data analysis for data observed on different dimensional domains has been recently published \cite{happMultivariateFunctionalPrincipal2018a}. It relies on an estimation of principal components for each univariate feature. The authors claim that the number of components can be estimated using ... We proposed to extend the sensitivity analysis in their Supplementary Material. The estimated number of components may not be reliable, and thus we advise practitioners to be careful when chosing the number of components.
 \end{abstract}
 
 % MAIN --------
+\input{main/main}
+
 \input{main/introduction}
 
 \input{main/ideas}
 % -------------
 
+% ACKNOWLEDGMENT -------
+\section*{Acknowledgment}
 
-\bibliographystyle{abbrv}
-\bibliography{./biblio.bib}
+S. Golovkine, A. J. Simpkin and N. Bargary are partially supported by Science Foundation Ireland under Grant No. 19/FFP/7002 and co-funded under the European Regional Development Fund. E. Gunning is supported in part Science Foundation Ireland (Grant No. 18/CRT/6049) and co-funded under the European Regional Development Fund.
+
+\bibliographystyle{plainnat}
+\bibliography{./biblio}
 
 \end{document}
 

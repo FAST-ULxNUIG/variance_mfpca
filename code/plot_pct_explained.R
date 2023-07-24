@@ -51,7 +51,8 @@ results_fls <- list.files(PATH, full.names = FALSE, pattern = '.rds')
 
 results <- results_fls |> 
     lapply(function(x) extract_npc(x)) |> 
-    bind_rows()
+    bind_rows() |> 
+    arrange(N, M)
 results$N_lab <- factor(
     results$N,
     labels = c("$N = 25$", "$N = 50$", "$N = 100$")
@@ -60,6 +61,7 @@ results$M_lab <- factor(
     results$M,
     labels = c("$M = 25$", "$M = 50$", "$M = 100$")
 )
+results$lab <- interaction(results$N_lab, results$M_lab, sep = ' and ')
 
 results_unique <- results |> 
     select(N, M, NPC) |> 
@@ -75,7 +77,7 @@ gg <- ggplot(results) +
             y = NPC, yend = NPC), data = results_unique,
         color = 'red'
     ) +
-    facet_grid(N_lab ~ M_lab) + 
+    facet_wrap(vars(lab)) + 
     labs(
         x = "True percentage explained",
         y = "Percentage explained estimed"

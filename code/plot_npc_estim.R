@@ -64,10 +64,12 @@ results$M_lab <- factor(
     results$M,
     labels = c("$M = 25$", "$M = 50$", "$M = 100$")
 )
+results$lab <- results$lab <- interaction(results$N_lab, results$M_lab, sep = ' and ')
 
 results_unique <- results |> 
     select(N, M, NPC) |> 
-    unique() |> 
+    unique()
+results_unique <- results_unique |> 
     mutate(
         NPC_int = sapply(
             results_unique$NPC, compute_npc, true_percentage = true_percentage
@@ -81,7 +83,7 @@ gg <- ggplot(results) +
         color = 'red'
     ) +
     scale_y_continuous(breaks = seq(1, 10, by = 1)) +
-    facet_grid(N_lab ~ M_lab) + 
+    facet_wrap(vars(lab)) +
     labs(
         x = "Percentage of variance explained",
         y = "NPC"
