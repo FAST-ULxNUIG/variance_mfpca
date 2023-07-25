@@ -65,7 +65,7 @@ error_eigenvalues <- function(eigenvalues, eigenvalues_estim) {
     (eigenvalues - eigenvalues_estim)**2 / eigenvalues**2
 }
 
-plot_eigenvalues <- function(idx) {
+create_dataframes <- function(idx) {
     # Extract eigenvalues
     eigenvalues <- extract_eigenvalues(results_fls[idx])
     
@@ -77,15 +77,33 @@ plot_eigenvalues <- function(idx) {
             error_eigenvalues(vals, x)
         }
     )
+    
+    return(eigenvalues)
+}
 
+create_errors <- function(idx) {
+    
+    eigenvalues <- create_dataframes(idx)
+    NPC <- min(eigenvalues$K, eigenvalues$P * eigenvalues$NPC)
     errors_tbl <- tibble(
+        N = rep(eigenvalues$N, eigenvalues$N_SIMU * NPC),
+        M = rep(eigenvalues$M, eigenvalues$N_SIMU * NPC),
+        P = rep(eigenvalues$P, eigenvalues$N_SIMU * NPC),
         number = rep(1:NPC, eigenvalues$N_SIMU),
+        NPC = rep(eigenvalues$NPC, eigenvalues$N_SIMU * NPC),
         value = unlist(eigenvalues$errors)
     )
+    
+    return(errors_tbl)
+}
+
+plot_eigenvalues <- function(idx) {
+
+    errors_tbl <- create_errors(idx)
 
     title = paste0(
-        '$N = ', eigenvalues$N, ' - M = ', eigenvalues$M,
-        ' - K_p = ', eigenvalues$NPC, '$'
+        '$N = ', errors_tbl$N, ' - M = ', errors_tbl$M,
+        ' - K_p = ', errors_tbl$NPC, '$'
     )
     gg <- ggplot(errors_tbl) +
         geom_boxplot(aes(x = number, y = value, group = number)) +
@@ -97,8 +115,8 @@ plot_eigenvalues <- function(idx) {
         see::theme_modern()
     
     name <- paste0(
-        '/ncomp_eigenvalues_N_', eigenvalues$N, '_M_', eigenvalues$M,
-        '_univ_', eigenvalues$NPC, '.tex'
+        '/ncomp_eigenvalues_N_', errors_tbl$N, '_M_', errors_tbl$M,
+        '_univ_', errors_tbl$NPC, '.tex'
     )
     tikzDevice::tikz(
         filename = paste0(GRAPHS, name), 
@@ -117,3 +135,35 @@ for (idx in 1:length(results_fls)) {
     plot_eigenvalues(idx)
 }
 
+
+# -----------------------------------------------------------------------------
+errors_concat <- 1:length(results_fls) |>
+    lapply(create_errors) |> 
+    bind_rows(.id = "column_label")
+
+errors_concat$N_lab <- factor(
+    errors_concat$N,
+    labels = c("$N = 25$", "$N = 50$", "$N = 100$")
+)
+errors_concat$M_lab <- factor(
+    errors_concat$M,
+    labels = c("$M = 25$", "$M = 50$", "$M = 100$")
+)
+errors_concat$lab <- errors_concat$lab <- interaction(errors_concat$N_lab, errors_concat$M_lab, sep = ' and ')
+
+tikzDevice::tikz(
+    filename = paste0(GRAPHS, '/ncomp.tex'), 
+    width = 10, height = 10, 
+    standAlone = TRUE, sanitize = FALSE
+)
+errors_concat |>
+    filter(NPC == 5) |>
+    ggplot() +
+        geom_boxplot(aes(x = number, y = value, group = number)) +
+        facet_wrap(vars(lab)) +
+        labs(
+            x = "Eigenvalues",
+            y = "Errors"
+        ) +
+        see::theme_modern()
+dev.off()
