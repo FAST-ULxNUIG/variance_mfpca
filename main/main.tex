@@ -10,15 +10,15 @@ We briefly present the estimation of MFPCA. For a detailled description of the e
 The estimation of the number of components can also be done using the percentage of variance explained. 
 
 We are interested by the estimation of the eigenvalues of functional datasets. Let $\{\nu_k\}_{1 \leq k \leq K}$ be the set of true eigenvalues and $\{\widehat{\nu}_k\}_{1 \leq k \leq K}$ be the set of estimated eigenfunctions. Simulations are the same as the first setting in \cite{happMultivariateFunctionalPrincipal2018a}. The accuracy of the resulting estimates $\widehat{\nu}_j$ is measured by the relative errors $\text{Err}(\widehat{\nu}_j)  = (\nu_j - \widehat{\nu}_j)^2 / \nu^2_j$. The percentage of variance explained by the $k$th component is defined as
-\begin{equation}
+\begin{equation}\label{eq:pve}
      \text{PVE}_k = \frac{\nu_k}{\sum_{k = 1}^K \nu_k}.
 \end{equation}
 The cumulative percentage of variance explained by the first $k$ components is given by
-\begin{equation}
+\begin{equation}\label{eq:cum_pve}
      \text{PVE}_{1:k} = \frac{\sum_{l = 1}^k \nu_l}{\sum_{l^\prime = 1}^K \nu_{l^\prime}}.
 \end{equation}
 Given a certain percentage of variance explained $\alpha$, the number of components needed to explain at least $\alpha\%$ of the variance of the data is
-\begin{equation}
+\begin{equation}\label{eq:npc}
      \text{NPC}_{\alpha} = \sum_{k = 1}^K \mathbf{1}\left\{\text{PVE}_{1:k} < \alpha\right\} + 1 = \min_{k = 1, \dots, K} \text{PVE}_{1:k} > \alpha.
 \end{equation}
 
@@ -40,7 +40,7 @@ For each univariate feature $p$, we estimate $K_p = 5$ principal components. The
     \label{fig:ncomp}
 \end{figure}
 
-
+In Figure \ref{fig:npc_estim}, we present the estimation of the number of components retained for a fix percentage of variance explained over $500$ simulations scenarios. The red dots are the number of components that should be retained for $\alpha\%$ of variance explained, given an exponential decreasing of the eigenvalues as defined in \eqref{eq:npc}. The size of the black dots represents the number of times each components have been selected over the $500$ simulations. We remark that the number of components appears to be underestimated for most combinations of the number of observations $N$, number of sampling points $M$ and percentage of variance explained wanted $\alpha\%$. This results may have an importance for practionners.
 \begin{figure}
      \centering
     \includegraphics[width=0.95\textwidth]{figures/npc_estim.pdf}
@@ -48,6 +48,11 @@ For each univariate feature $p$, we estimate $K_p = 5$ principal components. The
     \label{fig:npc_estim}
 \end{figure}
 
+In Figure \ref{fig:pct_estim}, we present an estimation the percentage of variance explained as the ratio between the sum of estimated eigenvalues and the sum of the true eigenvalues, defined by
+\begin{equation}
+     \widehat{\text{PVE}}_{1:k} = \frac{\sum_{l = 1}^k \widehat{\nu}_l}{\sum_{l^\prime = 1}^K \nu_{l^\prime}}.
+\end{equation}
+Due to estimation errors, this quantity can be larger than $1$. For all $\alpha$, except $\alpha = 0.99$, the estimation of the percentage of variance explained is higher than the true percentage of variance explained, which is coherent with the fact that we select the smallest number of components such that at least $\alpha\%$ of the variance is explained by this number of components. For $\alpha = 0.99$, each component explains so little variance by itself that if the number of components is poorly estimated it will not change the percentage of variance explained by the all.
 \begin{figure}
      \centering
     \includegraphics[width=0.95\textwidth]{figures/pct_estim.pdf}
@@ -55,5 +60,5 @@ For each univariate feature $p$, we estimate $K_p = 5$ principal components. The
     \label{fig:pct_estim}
 \end{figure}
 
-
-Codes to reproduce the simulations are available at \url{https://github.com/FAST-ULxNUIG/variance_mfpca}.
+To conclude, we would like the practionner to be careful when selecting the number of components for an MFPCA. Keeping all the estimated components from \cite{happMultivariateFunctionalPrincipal2018a} methodology may lead to poorly estimated components and selecting the number of components using the percentage of variance explained may lead to inconsistencies. To solve the first problem, we propose to only use the first $\min_p K_p$ estimated multivariate components. For the second, we recommend doing simulations that mimics the data at hand.
+The codes to reproduce the simulations, as well as more results, are available at \url{https://github.com/FAST-ULxNUIG/variance_mfpca}.
