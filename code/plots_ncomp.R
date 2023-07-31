@@ -147,23 +147,28 @@ errors_concat$N_lab <- factor(
 )
 errors_concat$M_lab <- factor(
     errors_concat$M,
-    labels = c("$M = 25$", "$M = 50$", "$M = 100$")
+    labels = c("$S = 25$", "$S = 50$", "$S = 100$")
 )
 errors_concat$lab <- errors_concat$lab <- interaction(errors_concat$N_lab, errors_concat$M_lab, sep = ' and ')
+
+gg <- errors_concat |>
+    filter(NPC == 5) |>
+    ggplot() +
+    geom_boxplot(aes(x = number, y = value, group = number)) +
+    facet_wrap(vars(lab)) +
+    labs(
+        x = "Eigenvalues",
+        y = "Errors"
+    ) +
+    see::theme_modern() +
+    theme(
+        strip.text = element_text(size = 14)
+    )
 
 tikzDevice::tikz(
     filename = paste0(GRAPHS, '/ncomp.tex'), 
     width = 10, height = 10, 
     standAlone = TRUE, sanitize = FALSE
 )
-errors_concat |>
-    filter(NPC == 5) |>
-    ggplot() +
-        geom_boxplot(aes(x = number, y = value, group = number)) +
-        facet_wrap(vars(lab)) +
-        labs(
-            x = "Eigenvalues",
-            y = "Errors"
-        ) +
-        see::theme_modern()
+plot(gg)
 dev.off()

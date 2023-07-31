@@ -62,7 +62,7 @@ results$N_lab <- factor(
 )
 results$M_lab <- factor(
     results$M,
-    labels = c("$M = 25$", "$M = 50$", "$M = 100$")
+    labels = c("$S = 25$", "$S = 50$", "$S = 100$")
 )
 results$lab <- interaction(results$N_lab, results$M_lab, sep = ' and ')
 
