@@ -78,6 +78,7 @@ results_unique <- results_unique |>
 
 gg <- ggplot(results) +
     geom_count(aes(x = as.factor(NPC), y = npc_estim)) +
+    scale_size_area() +
     geom_point(
         aes(x = as.factor(NPC), y = NPC_int), data = results_unique, 
         color = 'red'
@@ -85,8 +86,8 @@ gg <- ggplot(results) +
     scale_y_continuous(breaks = seq(1, 10, by = 1)) +
     facet_wrap(vars(lab)) +
     labs(
-        x = "Percentage of variance explained",
-        y = "NPC"
+        x = "Proportion of variance explained",
+        y = "Number of multivariate components"
     ) +
     guides(size = guide_legend(title = 'Number of simulations')) +
     see::theme_modern() +

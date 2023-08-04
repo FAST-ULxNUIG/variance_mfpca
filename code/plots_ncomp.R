@@ -152,16 +152,25 @@ errors_concat$M_lab <- factor(
 errors_concat$lab <- errors_concat$lab <- interaction(errors_concat$N_lab, errors_concat$M_lab, sep = ' and ')
 
 gg <- errors_concat |>
-    filter(NPC == 5) |>
+    filter((NPC == 5) | (NPC == 10)) |>
+    filter(number <= 25) |> 
+    mutate(NPC = as.factor(NPC)) |> 
     ggplot() +
-    geom_boxplot(aes(x = number, y = value, group = number)) +
+    geom_boxplot(
+        aes(x = number, y = value, colour = NPC, group = interaction(number, NPC))
+    ) +
     facet_wrap(vars(lab)) +
     labs(
         x = "Eigenvalues",
-        y = "Errors"
+        y = "Errors",
+        colour = "Number of univariate\ncomponents estimated"
     ) +
+    ylim(0, 1.1) + 
+    ylab("Err$(\\widehat{\\nu}_m)$") +
     see::theme_modern() +
     theme(
+        legend.position = "bottom",
+        legend.key.size = unit(1.5, 'cm'),
         strip.text = element_text(size = 14)
     )
 
