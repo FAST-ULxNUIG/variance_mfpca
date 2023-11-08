@@ -40,7 +40,7 @@ where the scores $\rho_{i, m}$ are sampled as Gaussian random variables with mea
 Figure \ref{fig:ncomp} displays a comparison of the error in the estimated eigenvalues when using $M_j = 5$ and $M_j = 10$, illustrating the effect of $M_j$ on eigenvalue estimation. The accuracy of the estimation declines with an increasing number of components in all scenarios. In particular, there is a notable jump in accuracy observed for the last five estimated eigenvalues when $M_j = 5$, while this is not clear when $M_j = 10$. The dependence of the eigenvalue estimates on the number of univariate functional principal components retained $M_j$ is clear, but establishing a general rule based on these observations is challenging. We suggest to estimate at most $M_{-}$ multivariate components; otherwise, the univariate components may not contain enough information to effectively recover their corresponding multivariate counterparts.
 \begin{figure}
      \centering
-    \includegraphics[width=0.95\textwidth]{figures/ncomp.pdf}
+    \includegraphics[width=0.94\textwidth]{figures/ncomp.pdf}
     \caption{Boxplots of the estimation errors of the eigenvalues. We estimated $5$ (red boxplots) and $10$ (blue boxplots) univariate functional components for each of $p = 5$ univariate features. The number of multivariate eigencomponents that are estimated is $25$. $N$ is the number of observations, $S$ is the number of sampling points per curve. We run $500$ simulations.}
     \label{fig:ncomp}
 \end{figure}
