@@ -54,6 +54,51 @@ Figure \ref{fig:npc_estim} presents the estimation of the number of multivariate
 
 % section simulation (end)
 
+\section{Application: Canadian weather dataset} % (fold)
+\label{sec:application_canadian_weather_dataset}
+
+We show how this fact may influenced on a real dataset. We consider the Canadian weather dataset, available in the \texttt{fda} R package. It contains daily measurements of temperature (in Celsius) and precipitation (in millimeters) for $35$ Canadian weather stations, averaged over the years 1960 to 1994. This is an example of multivariate functional data with $p = 2$ defined on one dimensional domains.
+
+The data are first expanded in a B-splines basis of $10$ functions. We consider two cases: in the first, we estimate the univariate eigencomponents that represent $90\%$ of the variance and in the second, we estimate the univariate eigencomponents that represent $99.9\%$ of the variance.
+
+\begin{table}
+\centering
+\begin{tabular}{|c c c c c|} 
+\hline
+Eigenvalues & 1st & 2nd & 3rd & 4th \\
+\hline
+$0.9\%$ & $15844$ & $1675$ & $307$ & $45$ \\
+$0.999\%$ & $15850$ & $1679$ & $438$ & $213$ \\
+\hline
+\end{tabular}
+\caption{Eigenvalues}
+\label{tab:eigenvalues}
+\end{table}
+
+
+Estimation of the eigenvalues \ref{tab:eigenvalues}. Figure \ref{fig:eigenfunctions_weather} presents the estimation of the eigenfunctions for the two cases.
+
+\begin{figure}
+     \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=1\textwidth]{figures/temperature_eigen.pdf}
+         \caption{Temperature}
+         \label{fig:temperature}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=1\textwidth]{figures/precipitation_eigen.pdf}
+         \caption{Precipitation}
+         \label{fig:precipitation}
+     \end{subfigure}
+     \caption{The first four eigenfunctions of the Canadian weather dataset.}
+     \label{fig:eigenfunctions_weather}
+\end{figure}
+
+% section application_canadian_weather_dataset (end)
+
 \section{Conclusion} % (fold)
 \label{sec:conclusion}
 
