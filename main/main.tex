@@ -3,7 +3,7 @@
 \section{Introduction} % (fold)
 \label{sec:introduction}
 
-\cite{happMultivariateFunctionalPrincipal2018} develop innovative theory and methodology for the dimension reduction of multivariate functional data on possibly different dimensional domains (e.g., curves and images), which extends existing methods that were limited to either univariate functional data or multivariate functional data on a common one-dimensional domain. Recent research has shown a growing presence of data defined on different dimensional domains in diverse fields such as biomechanics, e.g., \cite{warmenhovenBivariateFunctionalPrincipal2019} and neuroscience, e.g., \cite{songSparseMultivariateFunctional2022}, so we expect the work to have significant practical impact. We aim to provide commentary on the estimation of the number of principal components utilising the methodology devised in \cite{happMultivariateFunctionalPrincipal2018}. To achieve this, we conduct an extensive simulation study and subsequently propose practical guidelines for practitioners to adeptly choose the appropriate number of components for multivariate functional datasets. For ease of presentation, we use the same notation as in \cite{happMultivariateFunctionalPrincipal2018}. Code to reproduce the simulation study in this discussion is available at \url{https://github.com/FAST-ULxNUIG/variance_mfpca}.
+\cite{happMultivariateFunctionalPrincipal2018} develop innovative theory and methodology for the dimension reduction of multivariate functional data on possibly different dimensional domains (e.g., curves and images), which extends existing methods that were limited to either univariate functional data or multivariate functional data on a common one-dimensional domain. Recent research has shown a growing presence of data defined on different dimensional domains in diverse fields such as biomechanics, e.g., \cite{warmenhovenBivariateFunctionalPrincipal2019} and neuroscience, e.g., \cite{songSparseMultivariateFunctional2022}, so we expect the work to have significant practical impact. We aim to provide commentary on the estimation of the number of principal components utilising the methodology devised in \cite{happMultivariateFunctionalPrincipal2018}. To achieve this, we conduct an extensive simulation study and subsequently propose practical guidelines for practitioners to adeptly choose the appropriate number of components for multivariate functional datasets. For ease of presentation, we use the same notation as in \cite{happMultivariateFunctionalPrincipal2018}. Code to reproduce the simulation study and data analysis in this discussion is available at \url{https://github.com/FAST-ULxNUIG/variance_mfpca}.
 
 % section introduction (end)
 
@@ -57,43 +57,45 @@ Figure \ref{fig:npc_estim} presents the estimation of the number of multivariate
 \section{Application: Canadian weather dataset} % (fold)
 \label{sec:application_canadian_weather_dataset}
 
-We show how this fact may influenced on a real dataset. We consider the Canadian weather dataset, available in the \texttt{fda} R package. It contains daily measurements of temperature (in Celsius) and precipitation (in millimeters) for $35$ Canadian weather stations, averaged over the years 1960 to 1994. This is an example of multivariate functional data with $p = 2$ defined on one dimensional domains.
+To emphasize our simulation results, we apply the same idea on a real dataset, the Canadian weather dataset, available in the \textsf{R} package \texttt{fda} \citep{ramsayFdaFunctionalData2023}. The dataset contains daily measurements of temperature (in Celsius) and precipitation (in millimeters) for $35$ Canadian weather stations, averaged over the years 1960 to 1994. This is an example of multivariate functional data with $p = 2$ defined on one dimensional domain, the temperature being the first component and the precipitation being the second component. We aim to estimate the first four eigencomponents of the data.
 
-The data are first expanded in a B-splines basis of $10$ functions. We consider two cases: in the first, we estimate the univariate eigencomponents that represent $90\%$ of the variance and in the second, we estimate the univariate eigencomponents that represent $99.9\%$ of the variance.
+After expanding the data in a B-splines basis with $10$ functions, we consider two scenarios. In the first scenario, for each component, we estimate a number of univariate eigencomponent to represent $90\%$ of the variance. It results in two univariate eigenelements for each component ($M_1 = 2$ and $M_2 = 2$).
+In the second scenario, for each component, we estimate a number of univariate eigencomponent to represent $99.9\%$ of the variance. It results in six univariate eigenelements for the temperature ($M_1 = 6$) and five univariate eigenelements for the precipitation ($M_2 = 5$). In both scenarios, we can estimate four multivariate eigencomponents, as the number of estimable multivariate eigencomponents is equal to $M_1 + M_2$.
 
-\begin{table}
+Table \ref{tab:eigenvalues} presents the estimation of the eigenvalues for the Canadian weather dataset for both scenarios. We notice that the values are approximately the same for the first two eigenvalues, but quite different for the other two. 
+
+\begin{table}[!h]
 \centering
-\begin{tabular}{|c c c c c|} 
+\begin{tabular}{c c | c c c c}
+ & & \multicolumn{4}{c}{Eigenvalues} \\
+Scenario & Univariate expansions & 1st & 2nd & 3rd & 4th \\
 \hline
-Eigenvalues & 1st & 2nd & 3rd & 4th \\
-\hline
-$0.9\%$ & $15844$ & $1675$ & $307$ & $45$ \\
-$0.999\%$ & $15850$ & $1679$ & $438$ & $213$ \\
+1 & $0.9\%$ & $15844$ & $1675$ & $307$ & $45$ \\
+2 & $0.999\%$ & $15850$ & $1679$ & $438$ & $213$ \\
 \hline
 \end{tabular}
-\caption{Eigenvalues}
+\caption{Estimation of the first four eigenvalues of the Canadian weather dataset using different levels of variance cutoff for the univariate components.}
 \label{tab:eigenvalues}
 \end{table}
 
+Figure \ref{fig:eigenfunctions_weather} presents the estimation of the eigenfunctions for the Canadian weather dataset for both scenarios. As for the eigenvalues, we notice that the first two (multivariate) eigenfunctions are approximately the same, but the other two are not equal. We may explain this result as we do not have estimated enough information in the univariate decomposition in the first scenario to effectively estimate the third and fourth multivariate eigencomponents. We reiterate the suggestion to estimate at most $M_{-}$ multivariate eigencomponents (which will be $2$ for the first scenario).
 
-Estimation of the eigenvalues \ref{tab:eigenvalues}. Figure \ref{fig:eigenfunctions_weather} presents the estimation of the eigenfunctions for the two cases.
-
-\begin{figure}
+\begin{figure}[!h]
      \centering
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=1\textwidth]{figures/temperature_eigen.pdf}
-         \caption{Temperature}
+         \caption{Temperature (first component)}
          \label{fig:temperature}
      \end{subfigure}
      \hfill
      \begin{subfigure}[b]{0.49\textwidth}
          \centering
          \includegraphics[width=1\textwidth]{figures/precipitation_eigen.pdf}
-         \caption{Precipitation}
+         \caption{Precipitation (second component)}
          \label{fig:precipitation}
      \end{subfigure}
-     \caption{The first four eigenfunctions of the Canadian weather dataset.}
+     \caption{Estimation of the first four eigenfunctions of the Canadian weather dataset using different levels of variance cutoff for the univariate components.}
      \label{fig:eigenfunctions_weather}
 \end{figure}
 
@@ -104,7 +106,7 @@ Estimation of the eigenvalues \ref{tab:eigenvalues}. Figure \ref{fig:eigenfuncti
 
 \cite{happMultivariateFunctionalPrincipal2018} present a general methodology to estimate principal components for a set of multivariate functional data defined on, possibly, different dimensional domains. Their approach, based on the decomposition of the covariance of each univariate feature, allows easy estimation of the components.
 
-We have conducted a simulation study, and the obtained results highlight two important findings. Firstly, although utilizing only a few univariate components may yield a substantial number of multivariate components, their accuracy is notably limited. Secondly, relying on the percentage of variance explained as a criterion for selecting the number of univariate components may result in an underestimation of the number of multivariate components. We, therefore, advise practitioners to exercise caution when determining the number of estimated components required in their analysis. We suggest to estimate at most $M_{-}$ multivariate components. Additionally, we strongly recommend conducting simulations that closely resemble the characteristics of the actual data to select the appropriate number of components based on the percentage of variance explained criterion.
+We have conducted a simulation study and an example on a real dataset, and the obtained results highlight two important findings. Firstly, although utilizing only a few univariate components may yield a substantial number of multivariate components, their accuracy is notably limited. Secondly, relying on the percentage of variance explained as a criterion for selecting the number of univariate components may result in an underestimation of the number of multivariate components. We, therefore, advise practitioners to exercise caution when determining the number of estimated components required in their analysis. We suggest to estimate at most $M_{-}$ multivariate components. Additionally, we strongly recommend conducting simulations that closely resemble the characteristics of the actual data to select the appropriate number of components based on the percentage of variance explained criterion.
 
 % section conclusion (end)
 

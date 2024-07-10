@@ -27,18 +27,34 @@ weather <- multiFunData(temperature, precipitation)
 
 
 # -----------------------------------------------------------------------------
+# Univariate expansions
+
+# Temperature
+ufpca_temp_medium <- PACE(temperature, nbasis = 10, pve = 0.9)
+print(ufpca_temp_medium$npc)
+ufpca_temp_large <- PACE(temperature, nbasis = 10, pve = 0.999)
+print(ufpca_temp_large$npc)
+
+# Precipitation
+ufpca_prec_medium <- PACE(precipitation, nbasis = 10, pve = 0.9)
+print(ufpca_prec_medium$npc)
+ufpca_prec_large <- PACE(precipitation, nbasis = 10, pve = 0.999)
+print(ufpca_prec_large$npc)
+
+
+# -----------------------------------------------------------------------------
 # Compute MFPCA
 npc <- 4
 uniExpansions <- list(
-    list(type = 'uFPCA', pve = 0.9),
-    list(type = 'uFPCA', pve = 0.9)
+    list(type = 'uFPCA', pve = 0.9, nbasis = 10),
+    list(type = 'uFPCA', pve = 0.9, nbasis = 10)
 )
 results_medium <- MFPCA(weather, M = npc, uniExpansions = uniExpansions)
 
 
 uniExpansions <- list(
-    list(type = 'uFPCA', pve = 0.999),
-    list(type = 'uFPCA', pve = 0.999)
+    list(type = 'uFPCA', pve = 0.999, nbasis = 10),
+    list(type = 'uFPCA', pve = 0.999, nbasis = 10)
 )
 results_large <- MFPCA(weather, M = npc, uniExpansions = uniExpansions)
 
