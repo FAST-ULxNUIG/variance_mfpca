@@ -57,12 +57,11 @@ Figure \ref{fig:npc_estim} presents the estimation of the number of multivariate
 \section{Application: Canadian weather dataset} % (fold)
 \label{sec:application_canadian_weather_dataset}
 
-To emphasize our simulation results, we apply the same idea on a real dataset, the Canadian weather dataset, available in the \textsf{R} package \texttt{fda} \citep{ramsayFdaFunctionalData2023}. The dataset contains daily measurements of temperature (in Celsius) and precipitation (in millimeters) for $35$ Canadian weather stations, averaged over the years 1960 to 1994. This is an example of multivariate functional data with $p = 2$ defined on one dimensional domain, the temperature being the first component and the precipitation being the second component. We aim to estimate the first four eigencomponents of the data.
+To illustrate our simulation results, we apply the same idea on a real dataset, the Canadian weather dataset, available in the \textsf{R} package \texttt{fda} \citep{ramsayFdaFunctionalData2023}. The dataset contains daily measurements of temperature (in Celsius) and precipitation (in millimeters) for $35$ Canadian weather stations, averaged over the years 1960 to 1994. This is an example of multivariate functional data with $p = 2$ defined on one dimensional domain, the temperature being the first feature and the precipitation being the second feature. We aim to estimate $M$ multivariate eigencomponents of the data using different number of univariate eigencomponents and compare the results. For that, we define two scenarios, one where $M = M_{+}$ and one where $M = M_{-}$.
 
-After expanding the data in a B-splines basis with $10$ functions, we consider two scenarios. In the first scenario, for each component, we estimate a number of univariate eigencomponent to represent $90\%$ of the variance. It results in two univariate eigenelements for each component ($M_1 = 2$ and $M_2 = 2$).
-In the second scenario, for each component, we estimate a number of univariate eigencomponent to represent $99.9\%$ of the variance. It results in six univariate eigenelements for the temperature ($M_1 = 6$) and five univariate eigenelements for the precipitation ($M_2 = 5$). In both scenarios, we can estimate four multivariate eigencomponents, as the number of estimable multivariate eigencomponents is equal to $M_1 + M_2$.
+We first expand the data in a B-splines basis with $10$ functions. In the first scenario, for each feature, we estimate two univariate eigencomponents ($M_1 = 2$ and $M_2 = 2$). In the second scenario, for each feature, we estimate four univariate eigencomponents ($M_1 = 4$ and $M_2 = 4$). In both scenarios, we then estimate $M = 4$ multivariate eigencomponents. So, for the first scenario, $M = M_{+} = 4$ and for the second scenario, $M = M_{-} = 4$. Based on the simulation and Figure \ref{fig:ncomp}, we expect the first two multivariate eigencomponents to be similar and the other two to be unequal.
 
-Table \ref{tab:eigenvalues} presents the estimation of the eigenvalues for the Canadian weather dataset for both scenarios. We notice that the values are approximately the same for the first two eigenvalues, but quite different for the other two. 
+Table \ref{tab:eigenvalues} presents the estimation of the eigenvalues for the Canadian weather dataset for both scenarios. We notice that the values are similar for the first two eigenvalues, but quite different for the other two. 
 
 \begin{table}[!h]
 \centering
@@ -70,15 +69,15 @@ Table \ref{tab:eigenvalues} presents the estimation of the eigenvalues for the C
  & & \multicolumn{4}{c}{Eigenvalues} \\
 Scenario & Univariate expansions & 1st & 2nd & 3rd & 4th \\
 \hline
-1 & $0.9\%$ & $15844$ & $1675$ & $307$ & $45$ \\
-2 & $0.999\%$ & $15850$ & $1679$ & $438$ & $213$ \\
+1 & $2$ components & $15845$ & $1675$ & $308$ & $45$ \\
+2 & $4$ components & $15850$ & $1679$ & $438$ & $213$ \\
 \hline
 \end{tabular}
-\caption{Estimation of the first four eigenvalues of the Canadian weather dataset using different levels of variance cutoff for the univariate components.}
+\caption{Estimation of the first four eigenvalues of the Canadian weather dataset using two and four univariate components for the univariate expansions.}
 \label{tab:eigenvalues}
 \end{table}
 
-Figure \ref{fig:eigenfunctions_weather} presents the estimation of the eigenfunctions for the Canadian weather dataset for both scenarios. As for the eigenvalues, we notice that the first two (multivariate) eigenfunctions are approximately the same, but the other two are not equal. We may explain this result as we do not have estimated enough information in the univariate decomposition in the first scenario to effectively estimate the third and fourth multivariate eigencomponents. We reiterate the suggestion to estimate at most $M_{-}$ multivariate eigencomponents (which will be $2$ for the first scenario).
+Figure \ref{fig:eigenfunctions_weather} presents the estimation of the eigenfunctions for the Canadian weather dataset for both scenarios. As with the eigenvalues, we notice that the first two (multivariate) eigenfunctions are approximately the same, but the other two are not equal. While we do not know the true eigenfunctions, based on simulation results, the estimated multivariate eigenfunctions from the second scenario should be closer to the truth than the estimation from the first scenario. We may explain this result as we have not estimated enough information in the univariate decomposition in the first scenario to effectively estimate the third and fourth multivariate eigencomponents. We reiterate the suggestion to estimate at most $M_{-}$ multivariate eigencomponents (which will be $M_{-} = 2$ for the first scenario).
 
 \begin{figure}[!h]
      \centering
@@ -95,7 +94,7 @@ Figure \ref{fig:eigenfunctions_weather} presents the estimation of the eigenfunc
          \caption{Precipitation (second component)}
          \label{fig:precipitation}
      \end{subfigure}
-     \caption{Estimation of the first four eigenfunctions of the Canadian weather dataset using different levels of variance cutoff for the univariate components.}
+     \caption{Estimation of the first four eigenfunctions of the Canadian weather dataset using using two and four univariate components for the univariate expansions.}
      \label{fig:eigenfunctions_weather}
 \end{figure}
 

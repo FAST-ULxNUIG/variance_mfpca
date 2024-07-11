@@ -30,15 +30,15 @@ weather <- multiFunData(temperature, precipitation)
 # Univariate expansions
 
 # Temperature
-ufpca_temp_medium <- PACE(temperature, nbasis = 10, pve = 0.9)
+ufpca_temp_medium <- PACE(temperature, nbasis = 10, npc = 2)
 print(ufpca_temp_medium$npc)
-ufpca_temp_large <- PACE(temperature, nbasis = 10, pve = 0.999)
+ufpca_temp_large <- PACE(temperature, nbasis = 10, npc = 4)
 print(ufpca_temp_large$npc)
 
 # Precipitation
-ufpca_prec_medium <- PACE(precipitation, nbasis = 10, pve = 0.9)
+ufpca_prec_medium <- PACE(precipitation, nbasis = 10, npc = 2)
 print(ufpca_prec_medium$npc)
-ufpca_prec_large <- PACE(precipitation, nbasis = 10, pve = 0.999)
+ufpca_prec_large <- PACE(precipitation, nbasis = 10, npc = 4)
 print(ufpca_prec_large$npc)
 
 
@@ -46,15 +46,15 @@ print(ufpca_prec_large$npc)
 # Compute MFPCA
 npc <- 4
 uniExpansions <- list(
-    list(type = 'uFPCA', pve = 0.9, nbasis = 10),
-    list(type = 'uFPCA', pve = 0.9, nbasis = 10)
+    list(type = 'uFPCA', npc = 2, nbasis = 10),
+    list(type = 'uFPCA', npc = 2, nbasis = 10)
 )
 results_medium <- MFPCA(weather, M = npc, uniExpansions = uniExpansions)
 
 
 uniExpansions <- list(
-    list(type = 'uFPCA', pve = 0.999, nbasis = 10),
-    list(type = 'uFPCA', pve = 0.999, nbasis = 10)
+    list(type = 'uFPCA', npc = 4, nbasis = 10),
+    list(type = 'uFPCA', npc = 4, nbasis = 10)
 )
 results_large <- MFPCA(weather, M = npc, uniExpansions = uniExpansions)
 
@@ -85,7 +85,7 @@ gg <- ggplot(df, aes(x = X, y = value, group = interaction(G, variable))) +
     scale_linetype_manual(
         values = c("solid", "dotted"),
         name = "Univariate expansions",
-        labels = c("0.9\\%", "0.999\\%")
+        labels = c("2 components", "4 components")
     ) +
     labs(x = "Day of year", y = '') +
     see::theme_modern() +
@@ -129,7 +129,7 @@ gg <- ggplot(df, aes(x = X, y = value, group = interaction(G, variable))) +
     scale_linetype_manual(
         values = c("solid", "dotted"),
         name = "Univariate expansions",
-        labels = c("0.9\\%", "0.999\\%")
+        labels = c("2 components", "4 components")
     ) +
     labs(x = "Day of year", y = '') +
     see::theme_modern() +
