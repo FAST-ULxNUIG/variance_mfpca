@@ -1,0 +1,18 @@
+%!TEX root=../main.tex
+\section{Introduction} % (fold)
+\label{sec:introduction}
+
+We aim to show that the procedure proposed by \cite{happMultivariateFunctionalPrincipal2018a} may leaad to inconsistency in the retained number of components, based on extensive simulation.
+
+The simulation may varies has follow:
+\begin{itemize}
+    \item Number of curves $N = 25, 50, 100, 200$
+    \item Number of sampling points $M = 25, 50, 100, 200$
+    \item Number of components $P = 2, 5, 10, 20, 50$
+    \item No noise and we assume the curve are sampled on a common grid.
+    \item Based on the Karhunen-Loève decomposition, make sure that the decreasing of the eigenvalues is coherent with KL assumptions. The data are defined with a large number of components and different decreasing of the eigenvalues scenarios.
+    \item We do the same for the percentage of variance explained. We set the percentage of variance explained for the multivariate components to be $\alpha\%$ ($\alpha = 50, 75, 90, 95, 99$) and we change the percentage of variance explained by the univariate components.
+    \item The quality of the estimation is based on different measures: the number of retained components (only if we set the percentage of variance explained), the estimation of the eigenvalues ($\log-$AE), the estimation of the multivariate eigenfunctions (ISE) and the reconstruction of the curves (MISE).
+    \item Data are simulated with \cite{happMultivariateFunctionalPrincipal2018a} setting and we can use ICHEC to run them.
+\end{itemize}
+% section introduction (end)

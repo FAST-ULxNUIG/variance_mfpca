@@ -1,0 +1,164 @@
+\documentclass[12pt]{article}
+\usepackage{amsmath}
+\usepackage{amssymb}
+\usepackage{amsthm}
+\usepackage{mathtools}\mathtoolsset{showonlyrefs=true}
+
+\usepackage{graphicx}
+%\usepackage{enumerate}
+\usepackage{natbib}
+\usepackage{url} % not crucial - just used below for the URL 
+
+\usepackage{caption}
+\usepackage{subcaption}
+
+%\pdfminorversion=4
+% NOTE: To produce blinded version, replace "0" with "1" below.
+\newcommand{\blind}{0}
+
+% DON'T change margins - should be 1 inch all around.
+\addtolength{\oddsidemargin}{-.5in}%
+\addtolength{\evensidemargin}{-1in}%
+\addtolength{\textwidth}{1in}%
+\addtolength{\textheight}{1.7in}%
+\addtolength{\topmargin}{-1in}%
+
+% Environment
+\newcounter{rem}
+\newtheorem{remark}[rem]{Remark}
+
+\newcounter{th}
+\newtheorem{theorem}[th]{Theorem}
+
+\newcounter{scenario}[section]
+\newenvironment{scenario}[1][]{\refstepcounter{scenario}\par\medskip
+   \noindent \textbf{Scenario~\thescenario. #1} \rmfamily}{\medskip}
+
+\newenvironment{results}[1][]{\noindent \textbf{#1} \rmfamily}{\medskip}
+
+\providecommand{\keywords}[1]{\textbf{\textit{Keywords---}} #1}
+
+% Stats
+\newcommand{\EE}{\mathbb{E}} % Expectation
+\newcommand{\RR}{\mathbb{R}} % R
+\newcommand{\NN}{\mathbb{N}} % N
+\newcommand{\XX}{\mathcal{X}} % set X
+\newcommand{\dd}{{\rm d}}
+
+% Spaces
+\newcommand{\TT}[1]{\mathcal{T}_{#1}} % Domain definition space
+\newcommand{\sLp}[1]{\mathcal{L}^{2}\left(#1\right)} % L^p space
+\newcommand{\HH}{\mathcal{H}} % Product of L^p space
+\newcommand{\GG}{\mathcal{G}} % (L^p)^N space
+
+% Inner product and norm
+\newcommand{\pointt}{\mathbf{t}} % Indexed of multivariate curves
+\newcommand{\points}{\mathbf{s}} % Indexed of multivariate curves
+\newcommand{\inLp}[2]{\left\langle#1, #2\right\rangle} % Inner product in Lp
+\newcommand{\inR}[2]{\left(#1, #2\right)}
+\newcommand{\inRM}[2]{\left(#1, #2\right)_{\mathbf{M}}}
+\newcommand{\normLp}[1]{\left|\!\left|#1\right|\!\right|} % Norm in Lp
+\newcommand{\normR}[1]{\left(\!\left(#1\right)\!\right)} %
+\newcommand{\normRM}[1]{\left(\!\left(#1\right)\!\right)_{\mathbf{M}}} %
+\newcommand{\inH}[2]{\langle\!\langle#1, #2\rangle\!\rangle}
+\newcommand{\inHw}[2]{\langle\!\langle#1, #2\rangle\!\rangle_w}
+\newcommand{\inHG}[2]{\langle\!\langle#1, #2\rangle\!\rangle_\Gamma}
+\newcommand{\normH}[1]{\left|\!\left|\!\left|#1\right|\!\right|\!\right|}
+\newcommand{\normHG}[1]{\left|\!\left|\!\left|#1\right|\!\right|\!\right|_\Gamma}
+
+% Data/Process related
+\newcommand{\Xnp}{X_n^{(p)}} % Observation n, feature p
+\newcommand{\Xnq}{X_n^{(q)}} % Observation n, feature q
+\newcommand{\hatXnp}{\widehat{X}_n^{(p)}} % Reconstruction
+\newcommand{\Xp}[1]{X^{(#1)}} % Feature p
+\newcommand{\mup}[1]{\mu^{(#1)}} % Feature p
+\newcommand{\fp}{f^{(p)}} 
+\newcommand{\gp}{g^{(p)}}
+
+% Geometric related
+\newcommand{\pobs}[1]{\mathrm{#1}} % Point related to observations
+\newcommand{\CN}{\mathcal{C}_{\!N}} % Cloud of features
+\newcommand{\Gmu}{\pobs{G}_{\!\mu}} % Centre of gravity of C_N
+\newcommand{\OH}{\pobs{O}_{\!\mathcal{H}}} % Centre of H
+
+\newcommand{\pfea}[1]{\mathsf{#1}} % Point related to features
+\newcommand{\CP}{\mathcal{C}_{\!P}} % Cloud of observations
+\newcommand{\Gfea}{\pfea{G}_{\!\mu}} % Centre of gravity of C_P
+\newcommand{\OG}{\pfea{O}_{\!\RR}} % Centre of H
+
+% Declaration of math operator
+\DeclareMathOperator{\Var}{Var}
+\DeclareMathOperator{\Cov}{Cov}
+\DeclareMathOperator*{\argmax}{arg\,max}
+\DeclareMathOperator{\bigO}{\mathcal{O}}
+
+% Function subset restriction  
+\newcommand\restr[2]{{ %
+  \left.\kern-\nulldelimiterspace  %
+  #1  %
+  \vphantom{\big|}  %
+  \right|_{#2}  %
+}}
+
+
+\begin{document}
+
+%\bibliographystyle{natbib}
+
+\def\spacingset#1{\renewcommand{\baselinestretch}%
+{#1}\small\normalsize} \spacingset{1}
+
+
+%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%%
+
+\if0\blind
+{
+  \title{\bf On the estimation of the number of components in multivariate functional principal component analysis}
+  \author{Steven Golovkine\thanks{
+    S. Golovkine, A. J. Simpkin and N. Bargary are partially supported by Science Foundation Ireland under Grant No. 19/FFP/7002 and co-funded under the European Regional Development Fund. E. Gunning is supported in part Science Foundation Ireland (Grant No. 18/CRT/6049) and co-funded under the European Regional Development Fund. The authors also wish to acknowledge the Irish Centre for High-End Computing (ICHEC) for the provision of computational facilities and support.}\hspace{.2cm}\\
+    MACSI, Department of Mathematics and Statistics,\\ 
+    University of Limerick, Ireland\\
+    Edward Gunning \\
+    Department of Biostatistics and Epidemiology, \\
+    University of Pennsylvania, USA \\
+    Andrew J. Simpkin \\
+    School of Mathematical and Statistical Sciences, \\
+    University of Galway, Ireland \\
+    and \\
+    Norma Bargary \\
+    MACSI, Department of Mathematics and Statistics, \\
+    University of Limerick, Ireland}
+  \maketitle
+} \fi
+
+\if1\blind
+{
+  \bigskip
+  \bigskip
+  \bigskip
+  \begin{center}
+    {\LARGE\bf On the estimation of the number of components in multivariate functional principal component analysis}
+\end{center}
+  \medskip
+} \fi
+
+\bigskip
+\begin{abstract}
+\cite{happMultivariateFunctionalPrincipal2018} developed a methodology for principal components analysis of multivariate functional data for data observed on different dimensional domains. Their approach relies on an estimation of univariate functional principal components for each univariate functional feature. In this paper, we present extensive simulations to investigate choosing the number of principal components to retain. We show empirically that the conventional approach of using a percentage of variance explained threshold for each univariate functional feature may be unreliable when aiming to explain an overall percentage of variance in the multivariate functional data, and thus we advise practitioners to be careful when using it.
+\end{abstract}
+
+\noindent%
+{\it Keywords:} Dimension reduction; Functional data analysis; Variance
+\vfill
+
+\newpage
+\spacingset{1.75} % DON'T change the spacing!
+
+\input{main/main}
+
+
+
+\bibliographystyle{chicago}
+\bibliography{biblio}
+
+\end{document}
