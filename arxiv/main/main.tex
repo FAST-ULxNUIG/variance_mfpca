@@ -27,7 +27,7 @@ If we fix the percentage of variance explained to be $\alpha\%$, the number of c
 \section{Simulation} % (fold)
 \label{sec:simulation}
 
-We perform a simulation study based on the first setting in the simulation in \cite{happMultivariateFunctionalPrincipal2018}. The data-generating process is based on a truncated version of the Karhunen-Loève decomposition. First, we generate a large orthonormal basis $\{\psi_m\}_{1 \leq k \leq M}$ of $\sLp{\TT{}}$ on an interval $\TT{} = [0, T] \subset \RR$. We fix $T_1 = 0$ and $T_{p + 1} = T$ and we generate $p - 1$ cut points $T_2, \dots, T_p$ uniformly in $\TT{}$ such that $0 = T_1 < \cdots < T_p < T_{p+1} = T$. Let $s_1, \dots, s_p \in \{-1, 1\}$ be coefficients that randomly flip the eigenfunctions with probability $0.5$. The univariate components of the eigenfunctions are then defined as
+We perform a simulation study based on the first setting in the simulation in \cite{happMultivariateFunctionalPrincipal2018}. The data-generating process is based on a truncated version of the Karhunen-Loève decomposition. First, we generate a large orthonormal basis $\{\psi_m\}_{1 \leq k \leq M}$ of $\sLp{\TT{}}$ on an interval $\TT{} = [0, T] \subset \RR$. We fix $T_1 = 0$ and $T_{p + 1} = T$ and we generate $p - 1$ cut points $T_2, \dots, T_p$ uniformly in $\TT{}$ such that $0 = T_1 < \cdots < T_p < T_{p+1} = T$. Let $s_1, \dots, s_p \in \{-1, 1\}$ be coefficients that randomly flip the eigenfunctions with probability $0.5$, \textcolor{blue}{generated according to a Bernoulli distribution}. The univariate components of the eigenfunctions are then defined as
 \begin{equation}\label{eq:simulation_uni_component}
     \psi_m^{(j)}(t_j) = s_j \restr{\psi_m}{[T_j, T_{j + 1}]}\left(\frac{t_j - T_j}{T_{j + 1} - T_j}\right), \quad m = 1, \dots, M, \quad j = 1, \dots, p.
 \end{equation}
@@ -45,12 +45,105 @@ Figure \ref{fig:ncomp} displays a comparison of the error in the estimated eigen
     \label{fig:ncomp}
 \end{figure}
 Figure \ref{fig:npc_estim} presents the estimation of the number of multivariate components retained across $500$ simulation scenarios for a fixed percentage of variance explained. The red dots represent the number of multivariate components that would be needed to explain at least $\alpha\%$ of the variance ($50\%, 70\%, 90\%, 95\%$ and $99\%$), considering an exponential decay of the eigenvalues as defined in equation \eqref{eq:npc}. Note that, we can compute the number of multivariate components exactly as we know the true eigenvalues. Additionally, the size of the black dots indicates the frequency of selection for each number of multivariate component over the $500$ simulations. For example, for the panel where $N = 25$ and $S = 25$, and for a proportion of variance explained $\alpha = 0.5$, for approximately $200$ simulations of the $500$, two multivariate components were selected and for around $300$ simulations of the $500$ only one multivariate component was selected to explain $50\%$ of the variance, while the true number of multivariate components is $2$ (red dot). Notably, the number of components appears to be consistently underestimated for various combinations of the number of observations $N$, number of sampling points $S$, and desired percentage of variance explained $\alpha\%$. Therefore, this simulation scenario shows that using a percentage of variance explained of level $\alpha$ to choose the number of univariate components $M_j$ is not sufficient to estimate the number of multivariate functional principal components that explain $\alpha\%$ of the variance in the multivariate functional data. These findings may hold considerable significance for practitioners.
-\begin{figure}
-     \centering
-    \includegraphics[width=0.95\textwidth]{figures/npc_estim.pdf}
-    \caption{The size of the black dots represents the number of times the number of components has been selected over $500$ simulations. The red dots are the true number of components given the percentage of variance explained. $N$ is the number of observations, $S$ is the number of sampling points per curve. The size of the black dots is continuous.}
-    \label{fig:npc_estim}
-\end{figure}
+\begin{table}
+\begin{subtable}[h]{0.3\textwidth}
+\centering
+\begin{tabular}{rr|rr}
+    & & \multicolumn{2}{c}{$\widehat{\text{NPC}}_{\alpha}$} \\
+    $N$ & $S$ & 1 & 2 \\
+    \hline
+    25 & 25 & \textbf{301} & 199 \\
+    25 & 50 & \textbf{276} & 224 \\
+    25 & 100 & \textbf{270} & 230 \\
+    50 & 25 & 235 & \textbf{265} \\
+    50 & 50 & 208 & \textbf{292} \\
+    50 & 100 & 254 & \textbf{246} \\
+    100 & 25 & 158 & \textbf{342} \\
+    100 & 50 & 165 & \textbf{335} \\
+    100 & 100 & 178 & \textbf{322} \\
+\end{tabular}
+\caption{$\alpha = 50\%$ ($\text{NPC}_{\alpha} = 2$)}
+\end{subtable}
+\hfill
+\begin{subtable}[h]{0.3\textwidth}
+\centering
+\begin{tabular}{rr|rrr}
+    & & \multicolumn{3}{c}{$\widehat{\text{NPC}}_{\alpha}$} \\
+    $N$ & $S$ & 1 & 2 & 3\\
+    \hline
+    25 & 25 & 1 & \textbf{464} & 35\\
+    25 & 50 & 1 & \textbf{456} & 43\\
+    25 & 100 & 1 & \textbf{461} & 38\\
+    50 & 25 & 0 & \textbf{459} & 41\\
+    50 & 50 & 0 & \textbf{461} & 39\\
+    50 & 100 & 1 & \textbf{450} & 49\\
+    100 & 25 & 0 & \textbf{467} & 33\\
+    100 & 50 & 0 & \textbf{469} & 31\\
+    100 & 100 & 0 & \textbf{471} & 29\\
+\end{tabular}
+\caption{$\alpha = 70\%$ ($\text{NPC}_{\alpha} = 3$)}
+\end{subtable}
+\hfill
+\begin{subtable}[h]{0.3\textwidth}
+\centering
+\begin{tabular}{rr|rrr}
+    & & \multicolumn{3}{c}{$\widehat{\text{NPC}}_{\alpha}$} \\
+    $N$ & $S$ & 3 & 4 & 5 \\
+    \hline
+    25 & 25 & 15 & \textbf{400} & 85\\
+    25 & 50 & 18 & \textbf{375} & 107\\
+    25 & 100 & 12 & \textbf{379} & 109\\
+    50 & 25 & 0 & \textbf{322} & 178\\
+    50 & 50 & 0 & \textbf{271} & 229\\
+    50 & 100 & 0 & \textbf{268} & 232\\
+    100 & 25 & 0 & 212 & \textbf{288}\\
+    100 & 50 & 0 & 157 & \textbf{343}\\
+    100 & 100 & 0 & 136 & \textbf{364}\\
+\end{tabular}
+\caption{$\alpha = 90\%$ ($\text{NPC}_{\alpha} = 5$)}
+\end{subtable}
+\\
+\begin{subtable}[h]{0.45\textwidth}
+\centering
+\begin{tabular}{rr|rrrr}
+    & & \multicolumn{4}{c}{$\widehat{\text{NPC}}_{\alpha}$} \\
+    $N$ & $S$ & 4 & 5 & 6 & 7 \\
+    \hline
+    25 & 25 & 6 & \textbf{379} & 115 & 0\\
+    25 & 50 & 5 & \textbf{376} & 118 & 1\\
+    25 & 100 & 1 & \textbf{357} & 142 & 0\\
+    50 & 25 & 0 & \textbf{288} & 212 & 0\\
+    50 & 50 & 0 & 232 & \textbf{267} & 1\\
+    50 & 100 & 0 & 210 & \textbf{289} & 1\\
+    100 & 25 & 0 & 172 & \textbf{328} & 0\\
+    100 & 50 & 0 & 110 & \textbf{390} & 0\\
+    100 & 100 & 0 & 84 & \textbf{416} & 0\\
+\end{tabular}
+\caption{$\alpha = 95\%$ ($\text{NPC}_{\alpha} = 6$)}
+\end{subtable}
+\hfill
+\begin{subtable}[h]{0.45\textwidth}
+\centering
+\begin{tabular}{rr|rrrr}
+    & & \multicolumn{4}{c}{$\widehat{\text{NPC}}_{\alpha}$} \\
+    $N$ & $S$ & 7 & 8 & 9 & 10\\
+    \hline
+    25 & 25 & 10 & \textbf{365} & 125 & 0\\
+    25 & 50 & 2 & \textbf{362} & 136 & 0\\
+    25 & 100 & 2 & \textbf{338} & 160 & 0\\
+    50 & 25 & 0 & 117 & \textbf{383} & 0\\
+    50 & 50 & 0 & 86 & \textbf{413} & 1\\
+    50 & 100 & 0 & 52 & \textbf{448} & 0\\
+    100 & 25 & 0 & 8 & \textbf{492} & 0\\
+    100 & 50 & 0 & 0 & \textbf{499} & 1\\
+    100 & 100 & 0 & 2 & \textbf{497} & 1\\
+\end{tabular}
+\caption{$\alpha = 99\%$ ($\text{NPC}_{\alpha} = 10$)}
+\end{subtable}
+\caption{\textcolor{blue}{Estimation of the number of components to explain $\alpha\%$ of the variance over $500$ simulations. The true number of components that explain $\alpha\%$ of the variance is given in parenthesis. $N$ is the number of observations, $S$ is the number of sampling points per curve.}}
+\label{fig:npc_estim}
+\end{table}
+
 
 % section simulation (end)
 

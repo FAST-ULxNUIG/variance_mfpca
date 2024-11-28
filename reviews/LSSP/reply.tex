@@ -6,7 +6,11 @@
 \usepackage{mathtools}
 \mathtoolsset{showonlyrefs}
 
+\usepackage{natbib}
+
 \usepackage[normalem]{ulem}
+\usepackage{caption}
+\usepackage{subcaption}
 
 \setlength{\textwidth}{16cm}
 \setlength{\textheight}{24cm}
@@ -97,7 +101,7 @@ Although I understand how $s_1, \dots , s_p$ are obtained, the authors need to p
 
 \normalfont
 
-\textbf{Reply:} 
+\textbf{Reply:} The sentence ``generated according to a Bernoulli distribution'' has been added to the text.
 
 
 \bigskip
@@ -165,7 +169,7 @@ The authors classify the number of simulations based on the size of the circles,
 
 \normalfont
 
-\textbf{Reply:}
+\textbf{Reply:} We replace the plot by different tables presenting the results.
 
 
 \bigskip
@@ -182,8 +186,26 @@ The authors use B-spline bases for the Canadian weather dataset. I recommend tha
 
 \normalfont
 
-\textbf{Reply:}
+\textbf{Reply:} We recall that our aim is to ``provide commentary on the estimation of the number of principal components utilising the methodology devised in \cite{happMultivariateFunctionalPrincipal2018}''. We provide, here, the estimated eigenfunctions after smoothing the data using $10$ Fourier. The results are the same than with the B-splines basis. 
 
+\begin{figure}[!h]
+     \centering
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=1\textwidth]{temperature_eigen_fourier.pdf}
+         \caption{Temperature (first component)}
+         \label{fig:temperature}
+     \end{subfigure}
+     \hfill
+     \begin{subfigure}[b]{0.49\textwidth}
+         \centering
+         \includegraphics[width=1\textwidth]{precipitation_eigen_fourier.pdf}
+         \caption{Precipitation (second component)}
+         \label{fig:precipitation}
+     \end{subfigure}
+     \caption{Estimation of the first four eigenfunctions of the Canadian weather dataset using using two and four univariate components for the univariate expansions after Fourier basis smoothing.}
+     \label{fig:eigenfunctions_weather}
+\end{figure}
 
 
 \bigskip
@@ -201,7 +223,7 @@ Figure 3 is missing a y-axis.
 
 \normalfont
 
-\textbf{Reply:}
+\textbf{Reply:} We added y-axis to Figure 3.
 
 
 
@@ -228,10 +250,11 @@ The manuscript needs English proofreading.
 
 \textbf{Reply:} 
 
-LOL
+Three of the four authors are English native speakers. 
 
 \bigskip
 
+\itshape
 
 \textbf{Comment \#2 :}
 
@@ -243,12 +266,12 @@ What is the limitation of the proposed approach?
 
 \textbf{Reply:} 
 
-LOL
+We recall that our aim is to ``provide commentary on the estimation of the number of principal components utilising the methodology devised in \cite{happMultivariateFunctionalPrincipal2018}''. We are not proposing a new approach but comment on the limitation of the approach proposed in \cite{happMultivariateFunctionalPrincipal2018}.
 
 \bigskip
 
 
-%\bibliographystyle{apalike}
-%\bibliography{ref_short} 
+\bibliographystyle{plainnat}
+\bibliography{biblio} 
 
 \end{document} 

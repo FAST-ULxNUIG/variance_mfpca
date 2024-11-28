@@ -23,24 +23,18 @@ precipitation <- CanadianWeather$dailyAv[,,'Precipitation.mm']
 temperature <- funData(argvals = 1:365, X = t(temperature))
 precipitation <- funData(argvals = 1:365, X = t(precipitation))
 
-weather <- multiFunData(temperature, precipitation)
-
-
 # -----------------------------------------------------------------------------
-# Univariate expansions
+# Smooth the data using Fourier basis
+tt <- temperature@argvals[[1]]
+fourier_basis <- create.fourier.basis(rangeval = range(tt), nbasis = 10)
 
-# Temperature
-ufpca_temp_medium <- PACE(temperature, nbasis = 10, npc = 2)
-print(ufpca_temp_medium$npc)
-ufpca_temp_large <- PACE(temperature, nbasis = 10, npc = 4)
-print(ufpca_temp_large$npc)
+temperature_fd <- funData2fd(temperature, fourier_basis)
+temperature <- fd2funData(temperature_fd, argvals = tt)
 
-# Precipitation
-ufpca_prec_medium <- PACE(precipitation, nbasis = 10, npc = 2)
-print(ufpca_prec_medium$npc)
-ufpca_prec_large <- PACE(precipitation, nbasis = 10, npc = 4)
-print(ufpca_prec_large$npc)
+precipitation_fd <- funData2fd(precipitation, fourier_basis)
+precipitation <- fd2funData(precipitation_fd, argvals = tt)
 
+weather <- multiFunData(temperature, precipitation)
 
 # -----------------------------------------------------------------------------
 # Compute MFPCA
@@ -103,7 +97,7 @@ gg <- ggplot(df, aes(x = X, y = value, group = interaction(G, variable))) +
     ) +
     guides(color = guide_legend(order = 2), linetype = guide_legend(order = 1))
 
-name <- './graphs/canadian_weather/temperature_eigen.tex'
+name <- './graphs/canadian_weather/temperature_eigen_fourier.tex'
 tikzDevice::tikz(
     filename = name, 
     width = 10, height = 6.18047, 
@@ -147,7 +141,7 @@ gg <- ggplot(df, aes(x = X, y = value, group = interaction(G, variable))) +
     ) +
     guides(color = guide_legend(order = 2), linetype = guide_legend(order = 1))
 
-name <- './graphs/canadian_weather/precipitation_eigen.tex'
+name <- './graphs/canadian_weather/precipitation_eigen_fourier.tex'
 tikzDevice::tikz(
     filename = name, 
     width = 10, height = 6.18047, 

@@ -66,6 +66,16 @@ results$M_lab <- factor(
 )
 results$lab <- interaction(results$N_lab, results$M_lab, sep = ' and ')
 
+results |>
+    group_by(N, M, NPC, npc_estim) |> 
+    count() |> 
+    ungroup() |> 
+    filter(NPC == 0.99) |> 
+    pivot_wider(values_from = n, names_from = npc_estim, values_fill = 0) |>
+    select(-NPC) |> 
+    knitr::kable(format = 'latex', booktabs = TRUE)
+
+
 results_unique <- results |> 
     select(N, M, NPC) |> 
     unique()
