@@ -153,6 +153,7 @@ errors_concat$lab <- errors_concat$lab <- interaction(errors_concat$N_lab, error
 gg <- errors_concat |>
     filter((NPC == 5) | (NPC == 10)) |>
     filter(number <= 25) |> 
+    filter(M > 25) |> 
     mutate(NPC = as.factor(NPC)) |> 
     ggplot() +
     geom_boxplot(
@@ -175,7 +176,7 @@ gg <- errors_concat |>
 
 tikzDevice::tikz(
     filename = paste0(GRAPHS, '/ncomp.tex'), 
-    width = 10, height = 10, 
+    width = 10, height = 6.66, 
     standAlone = TRUE, sanitize = FALSE
 )
 plot(gg)
