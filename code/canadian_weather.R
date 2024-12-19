@@ -69,6 +69,28 @@ functions_large <- flipFuns(functions_medium, results_large$functions)
 
 
 # For temperature
+colourCount <- nObs(temperature)
+getPalette <- colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlBu"))
+
+name <- './graphs/canadian_weather/temperature.tex'
+tikzDevice::tikz(
+    filename = name, 
+    width = 10, height = 6.18047, 
+    standAlone = TRUE, sanitize = FALSE
+)
+autoplot(temperature) +
+    geom_line(aes(colour = obs)) +
+    labs(x = "Day of year", y = 'Temperature (°C)') +
+    scale_color_manual(values = getPalette(colourCount)) +
+    see::theme_modern() +
+    theme(
+        axis.text = element_text(size = 18),
+        axis.title = element_text(size = 20),
+        legend.position = "none",
+        strip.text = element_text(size = 20)
+    )
+dev.off()
+
 df <- data.frame(
     G = as.factor(rep(1:npc, each = 365)),
     X = rep(1:365, npc),
@@ -113,6 +135,28 @@ plot(gg)
 dev.off()
 
 # For precipitation
+colourCount <- nObs(temperature)
+getPalette <- colorRampPalette(RColorBrewer::brewer.pal(11, "RdYlBu"))
+
+name <- './graphs/canadian_weather/precipitation.tex'
+tikzDevice::tikz(
+    filename = name, 
+    width = 10, height = 6.18047, 
+    standAlone = TRUE, sanitize = FALSE
+)
+autoplot(precipitation) +
+    geom_line(aes(colour = obs)) +
+    labs(x = "Day of year", y = 'Precipitation (mm)') +
+    scale_color_manual(values = getPalette(colourCount)) +
+    see::theme_modern() +
+    theme(
+        axis.text = element_text(size = 18),
+        axis.title = element_text(size = 20),
+        legend.position = "none",
+        strip.text = element_text(size = 20)
+    )
+dev.off()
+
 df <- data.frame(
     G = as.factor(rep(1:npc, each = 365)),
     X = rep(1:365, npc),
