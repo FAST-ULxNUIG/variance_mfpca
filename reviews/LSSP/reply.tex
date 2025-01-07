@@ -340,7 +340,14 @@ Sincerely,
 
 \comments{It would be helpful to simulate a case with irregular time points, where each function has different time points. Moreover, the time points for each function do not need to be regular. I recommend that the authors consider these situations.}
 
-\reply{}
+\reply{Thank you for your suggestion to include a case with irregular functional data. We did the analysis with sparse data. The sparsification consisted in randomly removing between $40\%$ and $60\%$ of the $S$ sampling points for each curve. Figure~\ref{fig:ncomp} presents the results of the estimation the eigenvalues. The case where $S = 25$ is not included because the number of points (after sparsification) is not enough to consistently estimated $10$ univariate components for each univariate feature. The results are similar to the dense case (when all the sampling points are observed). The estimation of the last multivariate eigencomponents is not good. We choose to not include the graph in the paper to not overload it. We prefer to keep the message of the paper simple: even in simple situation (such as dense functional data), be careful when choosing the number of multivariate components to retain.}
+\begin{figure}
+     \centering
+    \includegraphics[width=0.94\textwidth]{ncomp.pdf}
+    \caption{Boxplots of the estimation errors of the eigenvalues. We estimated $M_j = 5$ (red boxplots) and $M_j = 10$ (blue boxplots) univariate functional components for $j = 1, \dots, p$. The number of multivariate eigencomponents that are estimated is $25$. $N$ is the number of observations, $S$ is the number of sampling points per curve before the sparsification. We run $500$ simulations.}
+    \label{fig:ncomp}
+\end{figure}
+
 
 
 \comments{The paragraph in the end of Page 2 and Page 3 requires a complete rewrite as it lacks the necessary rigor in its explanations and methodology.}
@@ -349,7 +356,8 @@ Sincerely,
 
 \comments{The simulation study and application sections of the paper need to be significantly revised. The current writing provides very limited explanation, which makes it difficult for readers to fully understand the intuition behind the results, the significance of the findings, and how the method performs in practice. The authors should offer more detailed descriptions of the simulation settings including the rationale behind the chosen parameters and models. Moreover, the application section should clearly describe the dataset, the variables used, and how the results from the method apply to real-world scenarios. More emphasis should be placed on interpreting the application results and their implications which help readers understand the practical value of the proposed method.}
 
-\reply{For the application, we have added a figure to visually present the dataset and included a new paragraph that provides a detailed interpretation of the eigencomponents. This paragraph highlights how the interpretation of the results differs between the two scenarios and explains their practical implications.}
+\reply{For the simulations, we added details on the results and their implications for practitioners.
+For the application, we added a figure to visually present the dataset and included a new paragraph that provides a detailed interpretation of the eigencomponents. This paragraph highlights how the interpretation of the results differs between the two scenarios and explains their practical implications.}
 
 \comments{The authors classify the number of simulations based on the size of the circles, which is very confusing. Please present the results using a clearer visualization method.}
 
