@@ -300,7 +300,7 @@ Dear Editor,
 \qquad
 
 
-We would be very grateful if you would consider this revision, entitled \emph{`On the estimation of the number of components in multivariate functional principal component analysis'} for publication in \emph{Communications in Statistics - Simulation and Computation}. We were able to address the comments made by the reviewers and to strengthen our results. A point-to-point reply is provided below. 
+We would be very grateful if you would consider this revision, entitled \emph{`On the estimation of the number of components in multivariate functional principal component analysis'} for publication in \emph{Communications in Statistics - Simulation and Computation}. We were able to address the comments made by the reviewers and strengthen our manuscript. A point-by-point reply is provided below. 
 
 \quad
 
@@ -340,7 +340,7 @@ Sincerely,
 
 \comments{It would be helpful to simulate a case with irregular time points, where each function has different time points. Moreover, the time points for each function do not need to be regular. I recommend that the authors consider these situations.}
 
-\reply{Thank you for your suggestion to include a case with irregular functional data. We did the analysis with sparse irregular data. The sparsification consisted in randomly removing between $40\%$ and $60\%$ of the $S$ sampling points for each curve. Figure~\ref{fig:ncomp} presents the results of the estimation of the eigenvalues. The case where $S = 25$ is not included because the number of points (after sparsification) is not enough to consistently estimated $10$ univariate components for each univariate feature. The results are similar to the dense case (when all the sampling points are observed on a regular grid). The estimation of the last multivariate eigencomponents is not good. We choose to not include the graph in the paper to not overload it. We prefer to keep the message of the paper simple: even in simple situation (such as dense functional data), be careful when choosing the number of univariate components for the estimation of the multivariate components.}
+\reply{Thank you for your suggestion to include a case with irregular functional data. We have now performed the analysis with sparse irregular data. The sparsification consisted of randomly removing between $40\%$ and $60\%$ of the $S$ sampling points for each curve. Figure~\ref{fig:ncomp} presents the results of the estimation of the eigenvalues. The case where $S = 25$ is not included because the number of points (after sparsification) is not enough to consistently estimated $10$ univariate components for each univariate feature. The results are similar to the dense case (when all the sampling points are observed on a regular grid). The estimation of the last multivariate eigencomponents is not good. We choose to not include the graph in the paper to not overload it but we display it below. We prefer to keep the message of the paper simple: even in simple situations (such as dense functional data), be careful when choosing the number of univariate components for the estimation of the multivariate components.}
 \begin{figure}[!h]
      \centering
     \includegraphics[width=0.99\textwidth]{ncomp.pdf}
@@ -352,7 +352,7 @@ Sincerely,
 
 \comments{The paragraph in the end of Page 2 and Page 3 requires a complete rewrite as it lacks the necessary rigor in its explanations and methodology.}
 
-\reply{We have rewritten the paragraph to include more details on the methodology developed in \cite{happMultivariateFunctionalPrincipal2018} and which we comment on.}
+\reply{We have rewritten the paragraph to include more details on the methodology developed in \cite{happMultivariateFunctionalPrincipal2018} which we comment on.}
 
 \comments{The simulation study and application sections of the paper need to be significantly revised. The current writing provides very limited explanation, which makes it difficult for readers to fully understand the intuition behind the results, the significance of the findings, and how the method performs in practice. The authors should offer more detailed descriptions of the simulation settings including the rationale behind the chosen parameters and models. Moreover, the application section should clearly describe the dataset, the variables used, and how the results from the method apply to real-world scenarios. More emphasis should be placed on interpreting the application results and their implications which help readers understand the practical value of the proposed method.}
 
@@ -361,7 +361,7 @@ For the application, we have added a figure to visually present the dataset and 
 
 \comments{The authors classify the number of simulations based on the size of the circles, which is very confusing. Please present the results using a clearer visualization method.}
 
-\reply{We have replaced the plot with tables that present the results more clearly to enhances the readability and interpretability of the findings.}
+\reply{We have replaced the plot with tables that present the results more clearly to enhance the readability and interpretability of the findings.}
 
 \comments{The authors use B-spline bases for the Canadian weather dataset. I recommend that they also use a Fourier basis and compare the results. This can demonstrate the robustness of the method, as Fourier bases typically provide a better fit for weather data.}
 
