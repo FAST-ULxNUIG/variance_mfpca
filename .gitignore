@@ -16,3 +16,8 @@ mfpca_components.sublime-workspace
 *.blg
 
 *.rds
+
+JCGS/*
+comments/*
+publishing/*
+reviews/LSSP?*
